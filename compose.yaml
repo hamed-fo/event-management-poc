@@ -1,0 +1,108 @@
+﻿services:
+  identityservice:
+    image: identityservice
+    build:
+      context: .
+      dockerfile: IdentityService/Dockerfile
+    container_name: identity-service
+    ports:
+      - "5001:5001"
+    env_file:
+      - .env.docker
+    environment:
+      - ASPNETCORE_URLS=http://+:5001
+    networks:
+      - eventpoc_network
+    volumes:
+      - identity_db:/app
+
+  producerservice:
+    image: producerservice
+    build:
+      context: .
+      dockerfile: ProducerService/Dockerfile
+    container_name: producer-service
+    ports:
+      - "5002:5002"
+    env_file:
+      - .env.docker
+    environment:
+      - ASPNETCORE_URLS=http://+:5002
+    depends_on:
+      identityservice:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - eventpoc_network
+    volumes:
+      - producer_db:/app
+
+  subscriptionservice:
+    image: subscriptionservice
+    build:
+      context: .
+      dockerfile: SubscriptionService/Dockerfile
+    container_name: subscription-service
+    ports:
+      - "5003:5003"
+    env_file:
+      - .env.docker
+    environment:
+      - ASPNETCORE_URLS=http://+:5003
+    depends_on:
+      identityservice:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - eventpoc_network
+
+  apigateway:
+    image: apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.docker
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+    depends_on:
+      - identityservice
+      - producerservice
+      - subscriptionservice
+    networks:
+      - eventpoc_network
+        
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # RabbitMQ communication port
+      - "15672:15672"  # RabbitMQ Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - eventpoc_network
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq-definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./rabbitmq.conf:/etc/rabbitmq/conf.d/99-config.conf
+
+networks:
+  eventpoc_network:
+    driver: bridge
+
+volumes:
+  identity_db:
+  rabbitmq_data:
+  producer_db:

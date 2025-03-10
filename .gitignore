@@ -1,0 +1,20 @@
+# Ignore build output
+bin/
+obj/
+*.db
+*.db-journal
+
+# Rider-specific ignores
+.idea/
+*.suo
+*.user
+*.csproj.user
+
+# Environment files
+.env
+.env.local
+.env.docker
+
+# Logs & temp files
+logs/
+*.log
