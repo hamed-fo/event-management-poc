@@ -18,3 +18,5 @@ obj/
 # Logs & temp files
 logs/
 *.log
+
+.DS_Store

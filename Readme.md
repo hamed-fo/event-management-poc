@@ -13,7 +13,7 @@ EventPoc is a **microservices-based** event management system built with:
 - 📝 **Event Registrations** (`SubscriptionService`)
 - 📨 **Event-Driven Communication** with RabbitMQ
 - 🌐 **API Gateway (Ocelot)** for Routing & Authentication
-- 📚 **Domain-Driven Design (DDD)** Architecture
+- 📚 **Domain-Driven Design (DDD) & Hexagonal** Architecture
 
 ## **📚 Domain-Driven Design (DDD)**
 EventPoc follows **DDD principles**:
@@ -21,6 +21,12 @@ EventPoc follows **DDD principles**:
 - **Use Cases** (Application Layer)
 - **Infrastructure** (Database, Messaging, Authentication)
 - **Separation of Concerns** between **Domain, Application, Infrastructure, and Presentation layers**
+
+### **🛠️ Hexagonal Architecture (Ports & Adapters)**
+- The system follows **Hexagonal Architecture** (also known as **Ports & Adapters**).
+- Business logic (**Domain Layer**) is **isolated from external dependencies**.
+- External components (**Databases, RabbitMQ, API Gateway**) interact **only through Ports & Adapters**.
+- ✅ **This ensures testability, flexibility, and maintainability.**
 
 ---
 
@@ -31,6 +37,9 @@ EventPoc follows **DDD principles**:
 - **Postman (Optional, or use `curl`)**
 
 ### 2️⃣ Modify `.env` File if required
+- `cp .env.example .env`
+- Generate a new JWT secret: https://jwtsecret.com/generate
+- Adjust `JWT_SECRET` environmental variable
 
 ### 3️⃣ Run the Application
 
