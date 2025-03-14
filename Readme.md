@@ -1,4 +1,9 @@
 # EventPoc - Microservices-Based Event Management System
+Where:
+- **Producers** can **create events**.
+- **Subscribers** can **register for events**.
+- The system is built for **scalability, flexibility, and maintainability**.
+
 
 ## **📝 Overview**
 EventPoc is a **microservices-based** event management system built with:
@@ -8,12 +13,17 @@ EventPoc is a **microservices-based** event management system built with:
 - **SQLite** (Database)
 
 ✅ **Key Features:**
-- 🔐 **Authentication & Authorization** with JWT (`IdentityService`)
-- 📅 **Event Management** (`ProducerService`)
-- 📝 **Event Registrations** (`SubscriptionService`)
-- 📨 **Event-Driven Communication** with RabbitMQ
-- 🌐 **API Gateway (Ocelot)** for Routing & Authentication
-- 📚 **Domain-Driven Design (DDD) & Hexagonal** Architecture
+- **🔐 Authentication & Authorization** → JWT-based authentication (`IdentityService`)
+- **📅 Event Management** → Producers create events (`ProducerService`)
+- **📝 Event Registration** → Subscribers register for events (`SubscriptionService`)
+- **📢 Event-Driven Architecture** → RabbitMQ ensures real-time event updates
+- **🌐 API Gateway** → Ocelot routes requests to the correct microservice
+- **📚 DDD & Hexagonal Architecture** → Keeps business logic clean & scalable
+
+## **📌 System Architecture**
+The system follows a **Microservices Architecture**, with each service handling a specific function and communicating via **RabbitMQ**.
+
+![System Architecture](docs/images/system-architecture.png)
 
 ## **📚 Domain-Driven Design (DDD)**
 EventPoc follows **DDD principles**:
@@ -28,6 +38,9 @@ EventPoc follows **DDD principles**:
 - External components (**Databases, RabbitMQ, API Gateway**) interact **only through Ports & Adapters**.
 - ✅ **This ensures testability, flexibility, and maintainability.**
 
+## **📌 Architectural Pattern**
+
+![Architectural Pattern](docs/images/architectural-pattern.png)
 ---
 
 ## **🚀 Getting Started**
@@ -45,7 +58,7 @@ EventPoc follows **DDD principles**:
 
 ```docker-compose up -d --build```
 
-All services will start on the following ports:
+The following services will be available after startup:
 
     API Gateway → http://localhost:5000
     IdentityService → http://localhost:5001
@@ -57,6 +70,20 @@ All services will start on the following ports:
 
 ➡️ [Postman Collection](postman_collection.json)
 
+Each service provides an **OpenAPI specification** in JSON format:
+
+| **Service** | **OpenAPI Spec URL** |
+|------------|---------------------------|
+| **IdentityService** | [🔗 OpenAPI JSON](http://localhost:5001/openapi/v1.json) |
+| **ProducerService** | [🔗 OpenAPI JSON](http://localhost:5002/openapi/v1.json) |
+| **SubscriptionService** | [🔗 OpenAPI JSON](http://localhost:5003/openapi/v1.json) |
+
+- Use an **OpenAPI viewer** like [Swagger Editor](https://editor.swagger.io/) or [Redocly Viewer](https://redocly.github.io/redoc/) to load the JSON files.
+
 ## 🛠️ ADR (Architecture Decision Records)
 
-We document major architecture decisions in [ADR Directory](ADRs) 📁
+All major architecture decisions are documented in the [ADR Directory](ADRs) 📁
+
+## **📌 Image Credits**
+- *Hexagonal Architecture image adapted from:*  
+  [Hexagonal Architecture Introduction & Structure – Wata.es](https://wata.es/hexagonal-architecture-introduction-and-structure/)
